@@ -230,6 +230,8 @@ class HabitTracker:
             messagebox.showinfo(
                 title="Information", message=f"{self.manager.username} deleted!"
             )
+            self.loged_in_frame.pack_forget()
+            self.welcome_frame.pack()
 
 
 tracker = HabitTracker(Manager())
