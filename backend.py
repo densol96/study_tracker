@@ -9,7 +9,7 @@ class Manager:
         self.username = "den4iks"
         self.id = ""
         # self.token = self.get_user_info()
-        self.token = "asdfgh12345"
+        self.token = ""
         self.headers = {"X-USER-TOKEN": ""}
 
     def get_user_info(self):
