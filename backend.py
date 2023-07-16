@@ -6,12 +6,11 @@ import time
 class Manager:
     def __init__(self):
         # self.username = input("Provide a unique username: ")
-        # self.username = "den4iks"
-        # self.id = input("Provide a graph ID (f.e. 'graph1'...) -->  ")
-        # # self.token = self.get_user_info()
-        # self.token = "asdfgh12345"
-        # self.headers = {"X-USER-TOKEN": self.token}
-        pass
+        self.username = "den4iks"
+        self.id = ""
+        # self.token = self.get_user_info()
+        self.token = "asdfgh12345"
+        self.headers = {"X-USER-TOKEN": ""}
 
     def get_user_info(self):
         check = True
@@ -47,14 +46,11 @@ class Manager:
         print(response.status_code)
         print(response.text)
         if response.status_code == 200:
-            return True
+            return True, response.text
         elif response.status_code == 503:
-            print("Frozen for 5 seconds")
-            time.sleep(5)
             return function()
         else:
-            self.delete_user()
-            return False
+            return False, response.text
 
     def create_user(self):
         pixela_endpoint = "https://pixe.la/v1/users"
@@ -72,7 +68,7 @@ class Manager:
 
         body_params = {
             "id": self.id,
-            "name": input("Name your graph(f.e. 'Studying' or 'Reading' etc..) --> "),
+            "name": "Studying",
             "unit": "minutes",
             "type": "int",
             "color": "shibafu",
@@ -85,18 +81,13 @@ class Manager:
 
         return self.check_response(response, self.create_graph)
 
-    def update_graph(self):
+    def update_graph(self, quantity_value):
         pixel_update_endpoint = (
             f"https://pixe.la/v1/users/{self.username}/graphs/{self.id}"
         )
         today = dt.now()
         date = today.strftime("%Y%m%d")
-        request_body = {
-            "date": date,
-            "quantity": input(
-                f"Enter how many minutes you studied on {date} (integers exp): "
-            ),
-        }
+        request_body = {"date": date, "quantity": quantity_value}
         response = requests.post(
             url=pixel_update_endpoint, headers=self.headers, json=request_body
         )
@@ -135,10 +126,6 @@ class Manager:
             header = self.headers
         delete_user_endpoint = f"https://pixe.la/v1/users/{username}"
         response = requests.delete(url=delete_user_endpoint, headers=header)
-        print(response.text)
-        print(response.status_code)
         if response.status_code == 200:
-            print("User deleted")
-        elif response.status_code == 503:
-            time.sleep(5)
-            self.delete_user()
+            return True
+        return False
